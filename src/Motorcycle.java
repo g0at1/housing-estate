@@ -27,7 +27,7 @@ public class Motorcycle extends Vehicle {
 
     @Override
     public String toString() {
-        return "Motorcycle: Name ="
+        return "Motorcycle: Name = "
                 + getName()
                 + ", Volume: "
                 + getVolume()
@@ -36,6 +36,7 @@ public class Motorcycle extends Vehicle {
                 + ", Engine Type: "
                 + getEngineType()
                 + ", Is three wheeled: "
-                + isThreeWheeled();
+                + isThreeWheeled()
+                + "\n";
     }
 }

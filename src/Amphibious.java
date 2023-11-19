@@ -26,7 +26,7 @@ public class Amphibious extends Vehicle {
 
     @Override
     public String toString() {
-        return "Amphibious: Name="
+        return "Amphibious: Name = "
                 + getName()
                 + ", Volume="
                 + getVolume()
@@ -35,6 +35,7 @@ public class Amphibious extends Vehicle {
                 + ", Engine Type="
                 + getEngineType()
                 + ", Number of Axles="
-                + getNumOfAxles();
+                + getNumOfAxles()
+                + "\n";
     }
 }

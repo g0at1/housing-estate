@@ -3,49 +3,49 @@ import java.time.Period;
 import java.util.ArrayList;
 import java.util.Scanner;
 
-public class Room implements Comparable<Room> {
+public class Space implements Comparable<Space> {
 
     private double volume;
     private Person tenant;
     private LocalDate startDate;
     private LocalDate endDate;
-    private static ArrayList<Room> rooms = new ArrayList<>();
+    private static ArrayList<Space> spaces = new ArrayList<>();
 
 
-    public Room(double volume,
-                Person tenant,
-                LocalDate startDate,
-                LocalDate endDate) {
+    public Space(double volume,
+                 Person tenant,
+                 LocalDate startDate,
+                 LocalDate endDate) {
         this.volume = volume;
         this.tenant = tenant;
         this.startDate = startDate;
         this.endDate = endDate;
-        rooms.add(this);
+        spaces.add(this);
     }
 
-    public Room(double length,
-                double width,
-                double height,
-                Person tenant,
-                LocalDate startDate,
-                LocalDate endDate) {
+    public Space(double length,
+                 double width,
+                 double height,
+                 Person tenant,
+                 LocalDate startDate,
+                 LocalDate endDate) {
         this.volume = Volume.calculateVolume(length, width, height);
         this.tenant = tenant;
         this.startDate = startDate;
         this.endDate = endDate;
-        rooms.add(this);
+        spaces.add(this);
     }
 
-    public Room(double volume) {
+    public Space(double volume) {
         this.volume = volume;
-        rooms.add(this);
+        spaces.add(this);
     }
 
-    public Room(double length,
-                double width,
-                double height) {
+    public Space(double length,
+                 double width,
+                 double height) {
         this.volume = Volume.calculateVolume(length, width, height);
-        rooms.add(this);
+        spaces.add(this);
     }
 
     public double getVolume() {
@@ -64,13 +64,13 @@ public class Room implements Comparable<Room> {
         return endDate;
     }
 
-    public static ArrayList<Room> getRooms() {
-        return rooms;
+    public static ArrayList<Space> getRooms() {
+        return spaces;
     }
 
     public static ArrayList<Apartment> getAllApartments() {
         ArrayList<Apartment> ap = new ArrayList<>();
-        for (Room r : rooms) {
+        for (Space r : spaces) {
             if (r instanceof Apartment) {
                 ap.add((Apartment) r);
             }
@@ -80,7 +80,7 @@ public class Room implements Comparable<Room> {
 
     public static ArrayList<ParkingSpace> getAllParkings() {
         ArrayList<ParkingSpace> ps = new ArrayList<>();
-        for (Room r : rooms) {
+        for (Space r : spaces) {
             if (r instanceof ParkingSpace) {
                 ps.add((ParkingSpace) r);
             }
@@ -122,7 +122,7 @@ public class Room implements Comparable<Room> {
         this.tenant = person;
         this.startDate = start;
         this.endDate = end;
-        person.setRentedRooms(this);
+        person.setRentedSpaces(this);
         System.out.println("Rent started from " + start + " to " + end +  " by " + this);
     }
 
@@ -147,7 +147,7 @@ public class Room implements Comparable<Room> {
         this.tenant = person;
         this.startDate = start;
         this.endDate = end;
-        person.setRentedRooms(this);
+        person.setRentedSpaces(this);
         System.out.println("Rent has successfully started " + this + " by " + person + " from: " + start + " to: " + end);
     }
 
@@ -166,16 +166,16 @@ public class Room implements Comparable<Room> {
         if (period.getDays() <= 30 && period.getMonths() < 1) {
             this.tenant.removeRoom(this);
             deleteTenant();
-            System.out.println("Rent rent is canceled");
+            System.out.println("Rent is canceled");
         } else {
             this.tenant.removeRoom(this);
             deleteTenant();
-            System.out.println("Rent rent is canceled, but tenant letter remains");
+            System.out.println("Rent is canceled, but tenant letter remains");
         }
     }
 
     @Override
-    public int compareTo(Room room) {
-        return (int) (getVolume() - room.getVolume());
+    public int compareTo(Space space) {
+        return (int) (getVolume() - space.getVolume());
     }
 }

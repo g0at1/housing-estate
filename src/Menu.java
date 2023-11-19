@@ -24,27 +24,31 @@ public class Menu {
         System.out.println("13: Take out content from parking space");
         System.out.println("14: Utilize all from parking space");
         System.out.println("15: Add new object");
-        System.out.println("16: Exit");
+        System.out.println("16: Insert item to parking space");
+        System.out.println("17: Exit");
     }
 
-    public static void printAllRooms() {
+    public static void printAllSpaces() {
         System.out.print("Apartments:");
         printList(housingEstate.getApartments());
+
         System.out.print("Parking spaces:");
         printList(housingEstate.getParkingSpaces());
     }
 
     public static void printRentedRooms() {
-        System.out.print("Rented Apartments:");
+        System.out.print("Rented apartments:");
         printList(housingEstate.getRentedApartments());
-        System.out.print("Rented Parking spaces:");
+
+        System.out.print("Rented parking spaces:");
         printList(housingEstate.getRentedParkingSpaces());
     }
 
     public static void printFreeRooms() {
-        System.out.print("Available Apartments:");
+        System.out.print("Available apartments:");
         printList(housingEstate.getFreeApartments());
-        System.out.print("Available Parking spaces:");
+
+        System.out.print("Available parking spaces:");
         printList(housingEstate.getFreeParkingSpaces());
     }
 
@@ -58,8 +62,9 @@ public class Menu {
 
     public static void rentSpace() {
         System.out.println("Choose room type to rent:");
-        System.out.println("1: Apartment");
-        System.out.println("2: Parking space");
+        System.out.println("""
+                            1: Apartment
+                            2: Parking space""");
 
         int command;
         do {
@@ -102,16 +107,20 @@ public class Menu {
 
             housingEstate.getFreeParkingById(parkingSpaceId).startRent(person, startDate, endDate);
         } else {
-            System.out.println("Person has not rented rooms");
+            System.out.println("Person has no rented rooms");
         }
     }
 
     public static void cancelRoomRent() {
+        int command, id;
+
         System.out.print("Rented rooms:");
         printList(housingEstate.getRentedRooms());
+
         System.out.println("Choose room type to cancel rent:");
-        System.out.println("1: Apartment\n2: Parking space");
-        int command, id;
+        System.out.println("""
+                            1: Apartment
+                            2: Parking space""");
         do {
             command = scanner.nextInt();
             switch (command) {
@@ -126,37 +135,41 @@ public class Menu {
                     housingEstate.getParkingById(id).cancelRent();
                     break;
                 default:
-                    System.out.println("Command not recognised! Please, try again\n");
+                    System.out.println("Invalid command\n");
             }
         } while (command != 1 && command != 2);
     }
 
     public static void renewRoomRent() {
-        System.out.print("Rented rooms:");
-        printList(housingEstate.getRentedRooms());
-        System.out.println("Choose room type to renew rent:");
-        System.out.println("1: Apartment\n2: Parking space");
         int command, id;
         String date;
+
+        System.out.print("Rented rooms:");
+        printList(housingEstate.getRentedRooms());
+
+        System.out.println("Choose room type to renew rent:");
+        System.out.println("""
+                            1: Apartment
+                            2: Parking space""");
         do {
             command = scanner.nextInt();
             switch (command) {
                 case 1:
-                    System.out.println("Enter Apartment ID");
+                    System.out.println("Enter apartment ID");
                     id = scanner.nextInt();
-                    System.out.println("Enter end date in format yyyy-mm-dd:");
+                    System.out.println("Enter end date (yyyy-mm-dd):");
                     date = scanner.next();
                     housingEstate.getApartmentById(id).renewRent(LocalDate.parse(date));
                     break;
                 case 2:
-                    System.out.println("Enter Parking space ID");
+                    System.out.println("Enter parking space ID");
                     id = scanner.nextInt();
-                    System.out.println("Enter end date in format yyyy-mm-dd:");
+                    System.out.println("Enter end date (yyyy-mm-dd):");
                     date = scanner.next();
                     housingEstate.getParkingById(id).renewRent(LocalDate.parse(date));
                     break;
                 default:
-                    System.out.println("Command not recognised! Please, try again\n");
+                    System.out.println("Invalid command\n");
             }
         } while (command != 1 && command != 2);
     }
@@ -206,6 +219,43 @@ public class Menu {
         System.out.println("All people from" + p.getRentedApartmentById(id) + " were evicted");
     }
 
+    public static void insertItem() throws TooManyThingsException {
+        printTenants();
+        Person p = inputPerson();
+        System.out.print("Rented parking:");
+        p.getRentedApartments().forEach((a) -> System.out.println(a.getParkingSpace().toString()));
+        String content;
+        int command, id;
+        System.out.println("Enter Parking space ID");
+        id = scanner.nextInt();
+        System.out.println("What you want to insert?");
+        System.out.println("""
+                            1: Vehicle
+                            2: Item""");
+        do {
+            command = scanner.nextInt();
+            switch (command) {
+                case 1:
+                    System.out.print("Enter vehicle name:");
+                    printList(Content.getVehicles());
+                    scanner.nextLine();
+                    content = scanner.nextLine();
+                    Vehicle v = Content.getVehicleByName(content);
+                    housingEstate.getParkingById(id).insertContent(p, v);
+                    break;
+                case 2:
+                    System.out.print("Enter item's name:");
+                    printList(Content.getItems());
+                    scanner.nextLine();
+                    content = scanner.nextLine();
+                    Item i = Content.getItemByName(content);
+                    housingEstate.getParkingById(id).insertContent(p, i);
+                    break;
+                default:
+                    System.out.println("Invalid command\n");
+            }
+        } while (command != 1 && command != 2);
+    }
     public static void takeOutItem() {
         printTenants();
         Person p = inputPerson();
@@ -222,7 +272,9 @@ public class Menu {
         printList(housingEstate.getParkingById(id).getContent());
 
         System.out.println("What you want to take out?");
-        System.out.println("1: Vehicle\n2: Item");
+        System.out.println("""
+                            1: Vehicle
+                            2: Item""");
         do {
             command = scanner.nextInt();
             switch (command) {
@@ -262,7 +314,12 @@ public class Menu {
 
     public static void createObject() {
         System.out.println("Which object you want to create?");
-        System.out.println("1: Person\n2: Apartment\n3: Parking space\n4: Vehicle\n5: Item");
+        System.out.println("""
+                           1: Person
+                           2: Apartment
+                           3: Parking space
+                           4: Vehicle
+                           5: Item""");
         int command;
         do {
             command = scanner.nextInt();
@@ -283,7 +340,7 @@ public class Menu {
                     createContent(false);
                     break;
                 default:
-                    System.out.println("Command not recognised! Please, try again\n");
+                    System.out.println("Invalid command\n");
             }
         } while (command != 1 && command != 2 && command != 3 && command != 4 && command != 5);
     }
@@ -320,7 +377,9 @@ public class Menu {
         double volume, rentalFee, length, width, height;
         scanner.nextLine();
         System.out.println("Choose volume input type:");
-        System.out.println("1: Cubic meters\n2: Length, width, height");
+        System.out.println("""
+                            1: Cubic meters
+                            2: Length, width, height""");
         int command;
         do {
             command = scanner.nextInt();
@@ -353,7 +412,9 @@ public class Menu {
         double volume, length, width, height;
         scanner.nextLine();
         System.out.println("Choose volume input type:");
-        System.out.println("1: Cubic meters\n2: Length, width, height");
+        System.out.println("""
+                            1: Cubic meters
+                            2: Length, width, height""");
         int command;
         do {
             command = scanner.nextInt();
@@ -373,7 +434,7 @@ public class Menu {
                     housingEstate.setRooms(new ParkingSpace(length, width, height));
                     break;
                 default:
-                    System.out.println("Command not recognised! Please, try again\n");
+                    System.out.println("Invalid command\n");
             }
         } while (command != 1 && command != 2);
     }
@@ -387,7 +448,9 @@ public class Menu {
         name = scanner.nextLine();
 
         System.out.println("Choose input type:");
-        System.out.println("1: Cubic meters\n2: Length, width, height");
+        System.out.println("""
+                            1: Cubic meters
+                            2: Length, width, height""");
         int inputType = scanner.nextInt();
 
         switch (inputType) {
@@ -452,7 +515,12 @@ public class Menu {
                                      double engineCapacity,
                                      String engineType) {
         System.out.println("Choose vehicle type to create: ");
-        System.out.println("1: Off-road car\n2: City car\n3: Boat\n4: Motorcycle\n5: Amphibious");
+        System.out.println("""
+                            1: Off-road car
+                            2: City car
+                            3: Boat
+                            4: Motorcycle
+                            5: Amphibious""");
         String bodyType;
         int command, peopleCapacity, numOfAxles;
         boolean isPickUp, isThreeWheeled;
@@ -486,7 +554,7 @@ public class Menu {
                     Content.setVehicles(new Amphibious(name, volume, engineCapacity, engineType, numOfAxles));
                     break;
                 default:
-                    System.out.println("Command not recognised! Please, try again\n");
+                    System.out.println("Invalid command\n");
             }
         } while (command != 1 && command != 2 && command != 3 && command != 4 && command != 5);
     }
@@ -498,7 +566,12 @@ public class Menu {
                                      double engineCapacity,
                                      String engineType) {
         System.out.println("Choose vehicle type to create: ");
-        System.out.println("1: Off-road car\n2: City car\n3: Boat\n4: Motorcycle\n5: Amphibious");
+        System.out.println("""
+                            1: Off-road car
+                            2: City car
+                            3: Boat
+                            4: Motorcycle
+                            5: Amphibious""");
         String bodyType;
         int command, peopleCapacity, numOfAxles;
         boolean isPickUp, isThreeWheeled;
@@ -533,16 +606,16 @@ public class Menu {
                     Content.setVehicles(new Amphibious(name, length, width, height, engineCapacity, engineType, numOfAxles));
                     break;
                 default:
-                    System.out.println("Command not recognised! Please, try again\n");
+                    System.out.println("Invalid command\n");
             }
         } while (command != 1 && command != 2 && command != 3 && command != 4 && command != 5);
     }
 
     public static ArrayList<LocalDate> inputRentDates() {
         ArrayList<LocalDate> dates = new ArrayList<>();
-        System.out.println("Enter start date in format yyyy-mm-dd");
+        System.out.println("Enter start date (yyyy-mm-dd):");
         dates.add(LocalDate.parse(scanner.next()));
-        System.out.println("Enter end date in format yyyy-mm-dd:");
+        System.out.println("Enter end date (yyyy-mm-dd):");
         dates.add(LocalDate.parse(scanner.next()));
         return dates;
     }

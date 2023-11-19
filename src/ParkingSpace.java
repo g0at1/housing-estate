@@ -1,7 +1,7 @@
 import java.time.LocalDate;
 import java.util.ArrayList;
 
-public class ParkingSpace extends Room {
+public class ParkingSpace extends Space {
 
     private int idNum;
     private ArrayList<Vehicle> content;
@@ -54,14 +54,14 @@ public class ParkingSpace extends Room {
         return content;
     }
 
-    public void insertContent(Person tenant, Vehicle vehicle) throws TooManyThingsException {
+    public void insertContent(Person tenant, Content content) throws TooManyThingsException {
         if (this.getTenant().equals(tenant)) {
-            if (this.freeVolume < vehicle.getVolume()) {
+            if (this.freeVolume < content.getVolume()) {
                 throw new TooManyThingsException();
             } else {
-                this.freeVolume -= vehicle.getVolume();
-                this.content.add(vehicle);
-                System.out.println(vehicle + " was added to " + this);
+                this.freeVolume -= content.getVolume();
+                this.content.add((Vehicle) content);
+                System.out.println(content + " was added to " + this);
             }
         }
     }

@@ -1,6 +1,8 @@
 public final class Volume {
 
-    public static double calculateVolume(double length, double width, double height) {
+    public static double calculateVolume(double length,
+                                         double width,
+                                         double height) {
         return length * width * height;
     }
 }

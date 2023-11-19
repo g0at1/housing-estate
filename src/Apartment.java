@@ -2,7 +2,7 @@ import java.time.LocalDate;
 import java.util.ArrayList;
 import java.util.List;
 
-public class Apartment extends Room {
+public class Apartment extends Space {
     private int idNum;
     private double rentalFee;
     private ArrayList<Person> people;

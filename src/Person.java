@@ -6,7 +6,7 @@ public class Person {
     private String lastName;
     private String pesel;
     private String address;
-    private ArrayList<Room> rentedRooms;
+    private ArrayList<Space> rentedSpaces;
     private static ArrayList<Person> persons = new ArrayList<>();
 
     public Person(String firstName,
@@ -17,7 +17,7 @@ public class Person {
         this.lastName = lastName;
         this.pesel = pesel;
         this.address = address;
-        rentedRooms = new ArrayList<>();
+        rentedSpaces = new ArrayList<>();
         persons.add(this);
     }
 
@@ -25,25 +25,25 @@ public class Person {
         return pesel;
     }
 
-    public ArrayList<Room> getRentedRooms() {
-        return rentedRooms;
+    public ArrayList<Space> getRentedRooms() {
+        return rentedSpaces;
     }
 
     public ArrayList<Apartment> getRentedApartments() {
         ArrayList<Apartment> apartments = new ArrayList<>();
-        for (Room room : this.getRentedRooms()) {
-            if (room instanceof Apartment) {
-                apartments.add((Apartment) room);
+        for (Space space : this.getRentedRooms()) {
+            if (space instanceof Apartment) {
+                apartments.add((Apartment) space);
             }
         }
         return apartments;
     }
 
     public Apartment getRentedApartmentById(int number) {
-        for (Room room : this.getRentedRooms()) {
-            if (room instanceof Apartment) {
-                if (((Apartment) room).getIdNum() == number) {
-                    return (Apartment) room;
+        for (Space space : this.getRentedRooms()) {
+            if (space instanceof Apartment) {
+                if (((Apartment) space).getIdNum() == number) {
+                    return (Apartment) space;
                 }
             }
         }
@@ -54,8 +54,8 @@ public class Person {
         return persons;
     }
 
-    public void setRentedRooms(Room rentedRoom) {
-        this.rentedRooms.add(rentedRoom);
+    public void setRentedSpaces(Space rentedSpace) {
+        this.rentedSpaces.add(rentedSpace);
     }
 
     public static Person getByPesel(String pesel) {
@@ -68,8 +68,8 @@ public class Person {
         return null;
     }
 
-    public void removeRoom(Room room) {
-        rentedRooms.remove(room);
+    public void removeRoom(Space space) {
+        rentedSpaces.remove(space);
     }
 
     @Override

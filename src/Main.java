@@ -15,6 +15,7 @@ public class Main {
         Person p3 = new Person("Anna", "Nowak", "503234567", "Gdańsk");
         Person p4 = new Person("Piotr", "Wiśniewski", "504345678", "Wrocław");
         Person p5 = new Person("Ewa", "Dąbrowska", "505456789", "Poznań");
+        Person p6 = new Person("Ewa", "Kotowska", "505456788", "Poznań");
 
         OffRoadCar orc = new OffRoadCar("Toyota Land Cruiser", 10, 2.0, "Diesel", false);
         CityCar cc = new CityCar("Mercedes-Benz C-Class", 8, 2.0, "Diesel", "Sedan");
@@ -23,12 +24,22 @@ public class Main {
         Amphibious amp = new Amphibious("Argo Frontier", 20, 2.0, "Diesel", 4);
 
         ParkingSpace ps1 = new ParkingSpace(50, p1, LocalDate.parse("2023-11-11"), LocalDate.parse("2024-11-11"));
-        p1.setRentedRooms(ps1);
         ParkingSpace ps2 = new ParkingSpace(60, p2, LocalDate.parse("2023-11-13"), LocalDate.parse("2024-11-11"));
-        p2.setRentedRooms(ps2);
         ParkingSpace ps3 = new ParkingSpace(10, 7, 3);
         ParkingSpace ps4 = new ParkingSpace(10, 10, 3);
         ParkingSpace ps5 = new ParkingSpace(30);
+
+        Apartment ap1 = new Apartment(50, 500, p1, LocalDate.parse("2023-11-11"), LocalDate.parse("2024-11-11"), ps1);
+        Apartment ap2 = new Apartment(100, 1000, p2, LocalDate.parse("2023-11-11"), LocalDate.parse("2024-11-11"), ps2);
+        Apartment ap3 = new Apartment(75, 800);
+        Apartment ap4 = new Apartment(200, 2500);
+        Apartment ap5 = new Apartment(60, 750);
+        Apartment ap6 = new Apartment(60, 750);
+
+        p1.setRentedSpaces(ps1);
+        p2.setRentedSpaces(ps2);
+        p1.setRentedSpaces(ap1);
+        p2.setRentedSpaces(ap2);
 
         ps1.insertContent(p1, orc);
         ps1.insertContent(p1, cc);
@@ -36,25 +47,17 @@ public class Main {
         ps2.insertContent(p2, moto);
         ps2.insertContent(p2, amp);
 
-        Apartment ap1 = new Apartment(50, 500, p1, LocalDate.parse("2023-11-11"), LocalDate.parse("2024-11-11"), ps1);
-        p1.setRentedRooms(ap1);
-        Apartment ap2 = new Apartment(100, 1000, p2, LocalDate.parse("2023-11-11"), LocalDate.parse("2024-11-11"), ps2);
-        p2.setRentedRooms(ap2);
-        Apartment ap3 = new Apartment(75, 800);
         ap3.startRent(p3, LocalDate.parse("2023-11-11"), LocalDate.parse("2024-11-11"));
-        Apartment ap4 = new Apartment(200, 2500);
-        ap4.startRent(p3, LocalDate.parse("2023-11-11"), LocalDate.parse("2024-11-11"));
-        Apartment ap5 = new Apartment(60, 750);
-        Apartment ap6 = new Apartment(60, 750);
+        ap4.startRent(p4, LocalDate.parse("2023-11-11"), LocalDate.parse("2024-11-11"));
 
-        ap1.checkIn(p1, Arrays.asList(p1, p2, p3));
+        ap1.checkIn(p1, Arrays.asList(p1, p2));
 
         do {
             Menu.printMenuOptions();
             command = scanner.nextInt();
 
             switch (command) {
-                case 1 -> Menu.printAllRooms();
+                case 1 -> Menu.printAllSpaces();
                 case 2 -> Menu.printRentedRooms();
                 case 3 -> Menu.printFreeRooms();
                 case 4 -> Menu.printAllPeople();
@@ -69,8 +72,9 @@ public class Main {
                 case 13 -> Menu.takeOutItem();
                 case 14 -> Menu.utilize();
                 case 15 -> Menu.createObject();
+                case 16 -> Menu.insertItem();
                 default -> System.out.println("Invalid command.");
             }
-        } while (command != 16);
+        } while (command != 17);
     }
 }

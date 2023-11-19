@@ -7,20 +7,20 @@ public class HousingEstate {
 
     public HousingEstate(String name) {
         this.name = name;
-        this.apartments = Room.getAllApartments();
-        this.parkingSpaces = Room.getAllParkings();
+        this.apartments = Space.getAllApartments();
+        this.parkingSpaces = Space.getAllParkings();
     }
 
     public String getName() {
         return name;
     }
 
-    public void setRooms(Room room) {
-        if (room instanceof Apartment) {
-            this.apartments.add((Apartment) room);
+    public void setRooms(Space space) {
+        if (space instanceof Apartment) {
+            this.apartments.add((Apartment) space);
         }
         else {
-            this.parkingSpaces.add((ParkingSpace) room);
+            this.parkingSpaces.add((ParkingSpace) space);
         }
     }
 
@@ -70,11 +70,11 @@ public class HousingEstate {
         return rented;
     }
 
-    public ArrayList<Room> getRentedRooms() {
-        ArrayList<Room> rentedRooms = new ArrayList<>();
-        rentedRooms.addAll(getRentedApartments());
-        rentedRooms.addAll(getRentedParkingSpaces());
-        return rentedRooms;
+    public ArrayList<Space> getRentedRooms() {
+        ArrayList<Space> rentedSpaces = new ArrayList<>();
+        rentedSpaces.addAll(getRentedApartments());
+        rentedSpaces.addAll(getRentedParkingSpaces());
+        return rentedSpaces;
     }
 
     public ArrayList<Apartment> getFreeApartments() {

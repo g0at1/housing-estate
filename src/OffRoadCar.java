@@ -28,7 +28,7 @@ public class OffRoadCar extends Vehicle {
 
     @Override
     public String toString() {
-        return "Off Road car: Name ="
+        return "Off Road car: Name = "
                 + getName()
                 + ", Volume: "
                 + getVolume()
@@ -37,6 +37,7 @@ public class OffRoadCar extends Vehicle {
                 + ", Engine Type: "
                 + getEngineType()
                 + ", Is pick up: "
-                + isPickUp();
+                + isPickUp()
+                + "\n";
     }
 }

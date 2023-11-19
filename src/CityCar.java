@@ -26,7 +26,7 @@ public class CityCar extends Vehicle {
 
     @Override
     public String toString() {
-        return "City car: Name ="
+        return "City car: Name = "
                 + getName()
                 + ", Volume: "
                 + getVolume()
@@ -35,6 +35,7 @@ public class CityCar extends Vehicle {
                 + ", Engine Type: "
                 + getEngineType()
                 + ", Body Type: "
-                + getBodyType();
+                + getBodyType()
+                + "\n";
     }
 }

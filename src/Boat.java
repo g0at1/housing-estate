@@ -26,15 +26,16 @@ public class Boat extends Vehicle {
 
     @Override
     public String toString() {
-        return "Boat: Name="
+        return "Boat: Name = "
                 + getName()
-                + ", Volume="
+                + ", Volume = "
                 + getVolume()
-                + ", Engine Capacity="
+                + ", Engine Capacity = "
                 + getEngineCapacity()
-                + ", Engine Type="
+                + ", Engine Type = "
                 + getEngineType()
-                + ", People Capacity="
-                + getPeopleCapacity();
+                + ", People Capacity = "
+                + getPeopleCapacity()
+                + "\n";
     }
 }

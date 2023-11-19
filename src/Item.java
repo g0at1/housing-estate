@@ -17,7 +17,7 @@ public class Item extends Content {
 
     @Override
     public String toString() {
-        return "\nItem: "
+        return "Item: "
                 + this.getName()
                 + ", Volume: "
                 + this.getVolume();

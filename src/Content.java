@@ -6,12 +6,16 @@ public abstract class Content implements Comparable<Content> {
     private static ArrayList<Vehicle> vehicles = new ArrayList<>();
     private static ArrayList<Item> items = new ArrayList<>();
 
-    public Content(String name, double volume) {
+    public Content(String name,
+                   double volume) {
         this.name = name;
         this.volume = volume;
     }
 
-    public Content(String name, double length, double width, double height) {
+    public Content(String name,
+                   double length,
+                   double width,
+                   double height) {
         this.name = name;
         this.volume = Volume.calculateVolume(length, width, height);
     }
