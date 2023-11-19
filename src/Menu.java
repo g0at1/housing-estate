@@ -10,22 +10,21 @@ public class Menu {
     public static void printMenuOptions() {
         System.out.println("Choose option:");
         System.out.println("1: Print all rooms of housing estate");
-        System.out.println("2: Print rented rooms");
-        System.out.println("3: Print available rooms");
+        System.out.println("2: Print rented spaces");
+        System.out.println("3: Print available spaces");
         System.out.println("4: Print all people");
-        System.out.println("5: Rent room");
+        System.out.println("5: Rent space");
         System.out.println("6: Cancel room rent");
         System.out.println("7: Renew room rent");
         System.out.println("8: Print residents of apartments");
         System.out.println("9: Print content of parking spaces");
         System.out.println("10: Check in person to apartment");
         System.out.println("11: Check out person from apartment");
-        System.out.println("12: Evict people from apartment");
+        System.out.println("12: Evict all people from apartment");
         System.out.println("13: Take out content from parking space");
         System.out.println("14: Utilize all from parking space");
-        System.out.println("15: Print tenant letters of all people");
-        System.out.println("16: Add new object");
-        System.out.println("17: Exit");
+        System.out.println("15: Add new object");
+        System.out.println("16: Exit");
     }
 
     public static void printAllRooms() {
@@ -39,62 +38,72 @@ public class Menu {
         System.out.print("Rented Apartments:");
         printList(housingEstate.getRentedApartments());
         System.out.print("Rented Parking spaces:");
-        printList(housingEstate.getRentedParkings());
+        printList(housingEstate.getRentedParkingSpaces());
     }
 
     public static void printFreeRooms() {
         System.out.print("Available Apartments:");
         printList(housingEstate.getFreeApartments());
         System.out.print("Available Parking spaces:");
-        printList(housingEstate.getFreeParkings());
+        printList(housingEstate.getFreeParkingSpaces());
     }
 
     public static void printAllPeople() {
         System.out.print("People:");
-        for (Person people : Person.getAllPeople()) {
+        for (Person people : Person.getPersons()) {
             System.out.println(people);
         }
         System.out.println();
     }
 
-    public static void rentRoom() {
+    public static void rentSpace() {
         System.out.println("Choose room type to rent:");
         System.out.println("1: Apartment");
         System.out.println("2: Parking space");
-        int command, id;
-        ArrayList<LocalDate> dates;
+
+        int command;
         do {
             command = scanner.nextInt();
+
             switch (command) {
-                case 1:
-                    System.out.print("Choose apartment to rent");
-                    printList(housingEstate.getFreeApartments());
-                    System.out.println("Enter Apartment ID");
-                    id = scanner.nextInt();
-                    dates = inputRentDates();
-                    printAllPeople();
-                    System.out.println("Choose tenant");
-                    housingEstate.getFreeApartmentById(id).startRent(inputPerson(), dates.get(0), dates.get(1));
-                    break;
-                case 2:
-                    printAllPeople();
-                    System.out.println("Choose tenant");
-                    Person p = inputPerson();
-                    if (!p.getRentedApartments().isEmpty()) {
-                        System.out.println("Choose parking space to rent");
-                        printList(housingEstate.getFreeParkings());
-                        System.out.println("Enter Parking space ID");
-                        id = scanner.nextInt();
-                        //dates = inputRentDates();
-                        housingEstate.getFreeParkingById(id).startRent(p, LocalDate.parse("2021-04-18"), LocalDate.parse("2021-04-19"));/*dates.get(0), dates.get(1));*/
-                    } else {
-                        System.out.println("Person has not rented rooms");
-                    }
-                    break;
-                default:
-                    System.out.println("Command not recognised! Please, try again\n");
+                case 1 -> rentApartment();
+                case 2 -> rentParkingSpace();
+                default -> System.out.println("Invalid command");
             }
         } while (command != 1 && command != 2);
+    }
+
+    private static void rentApartment() {
+        System.out.print("Choose apartment to rent");
+        printList(housingEstate.getFreeApartments());
+
+        int apartmentId = scanner.nextInt();
+        ArrayList<LocalDate> dates = inputRentDates();
+
+        printAllPeople();
+        System.out.println("Choose tenant");
+        housingEstate.getFreeApartmentById(apartmentId).startRent(
+                inputPerson(), dates.get(0), dates.get(1)
+        );
+    }
+
+    private static void rentParkingSpace() {
+        printAllPeople();
+        System.out.println("Choose tenant");
+        Person person = inputPerson();
+
+        if (!person.getRentedApartments().isEmpty()) {
+            System.out.println("Choose parking space to rent");
+            printList(housingEstate.getFreeParkingSpaces());
+
+            int parkingSpaceId = scanner.nextInt();
+            LocalDate startDate = LocalDate.parse("2023-11-11");
+            LocalDate endDate = LocalDate.parse("2024-11-11");
+
+            housingEstate.getFreeParkingById(parkingSpaceId).startRent(person, startDate, endDate);
+        } else {
+            System.out.println("Person has not rented rooms");
+        }
     }
 
     public static void cancelRoomRent() {
@@ -160,7 +169,7 @@ public class Menu {
     }
 
     public static void printContent() {
-        housingEstate.getRentedParkings().forEach((p) -> {
+        housingEstate.getRentedParkingSpaces().forEach((p) -> {
             System.out.print(p + ":");
             printList(p.getContent());
         });
@@ -200,14 +209,18 @@ public class Menu {
     public static void takeOutItem() {
         printTenants();
         Person p = inputPerson();
-        System.out.print("Rented parking:");
-        p.getRentedApartments().forEach((a) -> System.out.println(a.getParkingSpace().toString()));
         String content;
         int command, id;
+
+        System.out.print("Rented parking:");
+        p.getRentedApartments().forEach((a) -> System.out.println(a.getParkingSpace().toString()));
+
         System.out.println("Enter Parking space ID");
         id = scanner.nextInt();
+
         System.out.print("Parking content:");
         printList(housingEstate.getParkingById(id).getContent());
+
         System.out.println("What you want to take out?");
         System.out.println("1: Vehicle\n2: Item");
         do {
@@ -227,7 +240,7 @@ public class Menu {
                     housingEstate.getParkingById(id).takeOutContent(p, Content.getItemByName(content));
                     break;
                 default:
-                    System.out.println("Command not recognised! Please, try again\n");
+                    System.out.println("Invalid command\n");
             }
         } while (command != 1 && command != 2);
     }
@@ -235,19 +248,16 @@ public class Menu {
     public static void utilize() {
         printTenants();
         Person p = inputPerson();
+
         System.out.print("Rented parking:");
         p.getRentedApartments().forEach((a) -> System.out.println(a.getParkingSpace().toString()));
+
         System.out.println("Enter parking ID");
         int id = scanner.nextInt();
-        housingEstate.getParkingById(id).utilizeAll();
-        System.out.println("All items from" + housingEstate.getParkingById(id) + " were utilized");
-    }
 
-    public static void printTenantLetters() {
-        for (Person p : Person.getAllPeople()) {
-            System.out.println(p);
-            printList(p.getLetters());
-        }
+        housingEstate.getParkingById(id).utilizeAll();
+
+        System.out.println("All items from" + housingEstate.getParkingById(id) + " were utilized");
     }
 
     public static void createObject() {
@@ -261,10 +271,10 @@ public class Menu {
                     createPerson();
                     break;
                 case 2:
-                    createRoom(true);
+                    createSpace(true);
                     break;
                 case 3:
-                    createRoom(false);
+                    createSpace(false);
                     break;
                 case 4:
                     createContent(true);
@@ -298,8 +308,16 @@ public class Menu {
         new Person(name, surname, pesel, address);
     }
 
-    public static void createRoom(boolean f) {
-        double volume, rentaFee, length, width, height;
+    public static void createSpace(boolean isApartment) {
+        if (isApartment) {
+            createApartment();
+        } else {
+            createParkingSpace();
+        }
+    }
+
+    private static void createApartment() {
+        double volume, rentalFee, length, width, height;
         scanner.nextLine();
         System.out.println("Choose volume input type:");
         System.out.println("1: Cubic meters\n2: Length, width, height");
@@ -310,13 +328,9 @@ public class Menu {
                 case 1:
                     System.out.println("Enter volume:");
                     volume = scanner.nextDouble();
-                    if (f) {
-                        System.out.println("Enter rental fee:");
-                        rentaFee = scanner.nextDouble();
-                        housingEstate.setRooms(new Apartment(volume, rentaFee));
-                    } else {
-                        housingEstate.setRooms(new ParkingSpace(volume));
-                    }
+                    System.out.println("Enter rental fee:");
+                    rentalFee = scanner.nextDouble();
+                    housingEstate.setRooms(new Apartment(volume, rentalFee));
                     break;
                 case 2:
                     System.out.println("Enter length:");
@@ -325,13 +339,38 @@ public class Menu {
                     width = scanner.nextDouble();
                     System.out.println("Enter height:");
                     height = scanner.nextDouble();
-                    if (f) {
-                        System.out.println("Enter rental fee:");
-                        rentaFee = scanner.nextDouble();
-                        housingEstate.setRooms(new Apartment(length, width, height, rentaFee));
-                    } else {
-                        housingEstate.setRooms(new ParkingSpace(length, width, height));
-                    }
+                    System.out.println("Enter rental fee:");
+                    rentalFee = scanner.nextDouble();
+                    housingEstate.setRooms(new Apartment(length, width, height, rentalFee));
+                    break;
+                default:
+                    System.out.println("Invalid command\n");
+            }
+        } while (command != 1 && command != 2);
+    }
+
+    private static void createParkingSpace() {
+        double volume, length, width, height;
+        scanner.nextLine();
+        System.out.println("Choose volume input type:");
+        System.out.println("1: Cubic meters\n2: Length, width, height");
+        int command;
+        do {
+            command = scanner.nextInt();
+            switch (command) {
+                case 1:
+                    System.out.println("Enter volume:");
+                    volume = scanner.nextDouble();
+                    housingEstate.setRooms(new ParkingSpace(volume));
+                    break;
+                case 2:
+                    System.out.println("Enter length:");
+                    length = scanner.nextDouble();
+                    System.out.println("Enter width:");
+                    width = scanner.nextDouble();
+                    System.out.println("Enter height:");
+                    height = scanner.nextDouble();
+                    housingEstate.setRooms(new ParkingSpace(length, width, height));
                     break;
                 default:
                     System.out.println("Command not recognised! Please, try again\n");
@@ -339,90 +378,112 @@ public class Menu {
         } while (command != 1 && command != 2);
     }
 
-    public static void createContent(boolean f) {
-        double volume, length, width, height, engineCapacity;
+    public static void createContent(boolean createVehicle) {
         String name, engineType;
+        double volume, length, width, height, engineCapacity;
         scanner.nextLine();
+
         System.out.println("Enter name:");
         name = scanner.nextLine();
-        System.out.println("Choose volume input type:");
+
+        System.out.println("Choose input type:");
         System.out.println("1: Cubic meters\n2: Length, width, height");
-        int command;
-        do {
-            command = scanner.nextInt();
-            switch (command) {
-                case 1:
-                    System.out.println("Enter volume:");
-                    volume = scanner.nextDouble();
+        int inputType = scanner.nextInt();
+
+        switch (inputType) {
+            case 1:
+                System.out.println("Enter volume:");
+                volume = scanner.nextDouble();
+                if (createVehicle) {
+                    System.out.println("Enter engine capacity:");
+                    engineCapacity = scanner.nextDouble();
+                    System.out.println(engineCapacity);
+                    System.out.println("Enter engine type:");
+                    engineType = scanner.next();
+                    System.out.println(engineType);
+                    createVehicle(name, volume, engineCapacity, engineType);
+                } else {
+                    createItem(name, volume);
+                }
+                break;
+
+            case 2:
+                System.out.println("Enter length:");
+                length = scanner.nextDouble();
+                System.out.println("Enter width:");
+                width = scanner.nextDouble();
+                System.out.println("Enter height:");
+                height = scanner.nextDouble();
+                if (createVehicle) {
+                    System.out.println("Enter name:");
+                    name = scanner.nextLine();
                     System.out.println("Enter engine capacity:");
                     engineCapacity = scanner.nextDouble();
                     System.out.println("Enter engine type:");
                     engineType = scanner.next();
-                    if (f) {
-                        createVehicle(name, volume, engineCapacity, engineType);
-                    } else {
-                        Item i = new Item(name, volume);
-                    }
-                    break;
-                case 2:
-                    System.out.println("Enter length:");
-                    length = scanner.nextDouble();
-                    System.out.println("Enter width:");
-                    width = scanner.nextDouble();
-                    System.out.println("Enter height:");
-                    height = scanner.nextDouble();
-                    System.out.println("Enter engine capacity:");
-                    engineCapacity = scanner.nextDouble();
-                    System.out.println("Enter engine type:");
-                    engineType = scanner.next();
-                    if (f) {
-                        createVehicle(name, length, width, height, engineCapacity, engineType);
-                    } else {
-                        Item i = new Item(name, length, width, height);
-                    }
-                    break;
-                default:
-                    System.out.println("Command not recognised! Please, try again\n");
-            }
-        } while (command != 1 && command != 2);
+                    createVehicle(name, length, width, height, engineCapacity, engineType);
+                } else {
+                    System.out.println("Enter name:");
+                    name = scanner.nextLine();
+                    createItem(name, length, width, height);
+                }
+                break;
+
+            default:
+                System.out.println("Invalid input type. Please try again.");
+                break;
+        }
     }
 
-    public static void createVehicle(String name, double volume, double engineCapacity, String engineType) {
+    public static void createItem(String name,
+                                  double volume) {
+        Content.setItems(new Item(name, volume));
+    }
+
+    public static void createItem(String name,
+                                  double length,
+                                  double width,
+                                  double height) {
+        Content.setItems(new Item(name, length, width, height));
+    }
+
+    public static void createVehicle(String name,
+                                     double volume,
+                                     double engineCapacity,
+                                     String engineType) {
         System.out.println("Choose vehicle type to create: ");
         System.out.println("1: Off-road car\n2: City car\n3: Boat\n4: Motorcycle\n5: Amphibious");
         String bodyType;
         int command, peopleCapacity, numOfAxles;
         boolean isPickUp, isThreeWheeled;
+
         do {
             command = scanner.nextInt();
             switch (command) {
                 case 1:
-                    System.out.println("Enter engine type:");
-                    scanner.nextLine();
-                    engineType = scanner.nextLine();
                     System.out.println("Is pick-up? (true/false)");
                     isPickUp = scanner.nextBoolean();
-                    OffRoadCar orc = new OffRoadCar(name, volume, engineCapacity, engineType, isPickUp);
+                    Content.setVehicles(new OffRoadCar(name, volume, engineCapacity, engineType, isPickUp));
                     break;
                 case 2:
                     System.out.println("Enter body type:");
                     bodyType = scanner.next();
-                    CityCar cc = new CityCar(name, volume, engineCapacity, engineType, bodyType);
+                    Content.setVehicles(new CityCar(name, volume, engineCapacity, engineType, bodyType));
                     break;
                 case 3:
                     System.out.println("Enter people capacity of boat:");
                     peopleCapacity = scanner.nextInt();
-                    Boat b = new Boat(name, volume, engineCapacity, engineType, peopleCapacity);
+                    Content.setVehicles(new Boat(name, volume, engineCapacity, engineType, peopleCapacity));
                     break;
                 case 4:
                     System.out.println("Is three wheeled? (true/false):");
                     isThreeWheeled = scanner.nextBoolean();
-                    Motorcycle m = new Motorcycle(name, volume, engineCapacity, engineType, isThreeWheeled);
+                    Content.setVehicles(new Motorcycle(name, volume, engineCapacity, engineType, isThreeWheeled));
                     break;
                 case 5:
                     System.out.println("Enter number of axles:");
                     numOfAxles = scanner.nextInt();
-                    Amphibious a = new Amphibious(name, volume, engineCapacity, engineType, numOfAxles);
+                    Content.setVehicles(new Amphibious(name, volume, engineCapacity, engineType, numOfAxles));
                     break;
                 default:
                     System.out.println("Command not recognised! Please, try again\n");
@@ -430,12 +491,18 @@ public class Menu {
         } while (command != 1 && command != 2 && command != 3 && command != 4 && command != 5);
     }
 
-    public static void createVehicle(String name, double length, double width, double height, double engineCapacity, String engineType) {
+    public static void createVehicle(String name,
+                                     double length,
+                                     double width,
+                                     double height,
+                                     double engineCapacity,
+                                     String engineType) {
         System.out.println("Choose vehicle type to create: ");
         System.out.println("1: Off-road car\n2: City car\n3: Boat\n4: Motorcycle\n5: Amphibious");
         String bodyType;
         int command, peopleCapacity, numOfAxles;
         boolean isPickUp, isThreeWheeled;
+
         do {
             command = scanner.nextInt();
             switch (command) {
@@ -443,27 +510,27 @@ public class Menu {
                     System.out.println("Enter engine type:");
                     scanner.nextLine();
                     isPickUp = scanner.nextBoolean();
-                    OffRoadCar frc = new OffRoadCar(name, length, width, height, engineCapacity, engineType, isPickUp);
+                    Content.setVehicles(new OffRoadCar(name, length, width, height, engineCapacity, engineType, isPickUp));
                     break;
                 case 2:
                     System.out.println("Enter body type:");
                     bodyType = scanner.next();
-                    CityCar cc = new CityCar(name, length, width, height, engineCapacity, engineType, bodyType);
+                    Content.setVehicles(new CityCar(name, length, width, height, engineCapacity, engineType, bodyType));
                     break;
                 case 3:
                     System.out.println("Enter people capacity of boat:");
                     peopleCapacity = scanner.nextInt();
-                    Boat b = new Boat(name, length, width, height, engineCapacity, engineType, peopleCapacity);
+                    Content.setVehicles(new Boat(name, length, width, height, engineCapacity, engineType, peopleCapacity));
                     break;
                 case 4:
                     System.out.println("Enter engine volume:");
                     isThreeWheeled = scanner.nextBoolean();
-                    Motorcycle m = new Motorcycle(name, length, width, height, engineCapacity, engineType, isThreeWheeled);
+                    Content.setVehicles(new Motorcycle(name, length, width, height, engineCapacity, engineType, isThreeWheeled));
                     break;
                 case 5:
                     System.out.println("Enter number of axles:");
                     numOfAxles = scanner.nextInt();
-                    Amphibious a = new Amphibious(name, length, width, height, engineCapacity, engineType, numOfAxles);
+                    Content.setVehicles(new Amphibious(name, length, width, height, engineCapacity, engineType, numOfAxles));
                     break;
                 default:
                     System.out.println("Command not recognised! Please, try again\n");

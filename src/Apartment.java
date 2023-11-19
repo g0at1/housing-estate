@@ -8,7 +8,6 @@ public class Apartment extends Room {
     private ArrayList<Person> people;
     private ParkingSpace parkingSpace;
     private static int counter = 1;
-    //private static ArrayList<Apartment> allApartments = new ArrayList<>();
 
     public Apartment(double volume, double rentalFee, Person tenant, LocalDate startDate, LocalDate endDate, ParkingSpace parkingSpace) {
         super(volume, tenant, startDate, endDate);
@@ -16,7 +15,6 @@ public class Apartment extends Room {
         this.parkingSpace = parkingSpace;
         this.people = new ArrayList<>();
         this.idNum = counter++;
-        //this.allApartments.add(this);
     }
 
     public Apartment(double length, double width, double height, Person tenant, LocalDate startDate, LocalDate endDate, double rentalFee, ParkingSpace parkingSpace) {
@@ -25,7 +23,6 @@ public class Apartment extends Room {
         this.parkingSpace = parkingSpace;
         this.people = new ArrayList<>();
         this.idNum = counter++;
-        //this.allApartments.add(this);
     }
 
     public Apartment(double volume, double rentalFee) {
@@ -33,7 +30,6 @@ public class Apartment extends Room {
         this.rentalFee = rentalFee;
         this.people = new ArrayList<>();
         this.idNum = counter++;
-        //this.allApartments.add(this);
     }
 
     public Apartment(double length, double width, double height, double rentalFee) {
@@ -41,7 +37,6 @@ public class Apartment extends Room {
         this.rentalFee = rentalFee;
         this.people = new ArrayList<>();
         this.idNum = counter++;
-        //this.allApartments.add(this);
     }
 
     public int getIdNum() {
@@ -85,9 +80,7 @@ public class Apartment extends Room {
         }
     }
 
-    public void evictPeople() {
-        this.people.clear();
-    }
+    public void evictPeople() { this.people.clear(); }
 
     public void addParkingSpace(ParkingSpace parkingSpace, LocalDate startDate, LocalDate endDate) {
         if (this.parkingSpace == null) {

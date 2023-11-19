@@ -1,11 +1,15 @@
 public class Item extends Content {
 
-    public Item(String name, double volume) {
+    public Item(String name,
+                double volume) {
         super(name, volume);
         Content.setItems(this);
     }
 
-    public Item(String name, double length, double width, double height) {
+    public Item(String name,
+                double length,
+                double width,
+                double height) {
         super(name, length, width, height);
         Content.setItems(this);
     }
@@ -13,6 +17,9 @@ public class Item extends Content {
 
     @Override
     public String toString() {
-        return "\nItem " + this.getName() + " (volume:" + this.getVolume() + ")";
+        return "\nItem: "
+                + this.getName()
+                + ", Volume: "
+                + this.getVolume();
     }
 }

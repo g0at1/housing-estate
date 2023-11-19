@@ -2,45 +2,27 @@ import java.util.*;
 
 public class Person {
 
-    private String name;
-    private String surname;
+    private String firstName;
+    private String lastName;
     private String pesel;
     private String address;
-    private ArrayList<TenantLetter> letters;
     private ArrayList<Room> rentedRooms;
-    private static ArrayList<Person> allPeople = new ArrayList<>();
+    private static ArrayList<Person> persons = new ArrayList<>();
 
-    public Person(String name, String surname, String pesel, String address) {
-        this.name = name;
-        this.surname = surname;
+    public Person(String firstName,
+                  String lastName,
+                  String pesel,
+                  String address) {
+        this.firstName = firstName;
+        this.lastName = lastName;
         this.pesel = pesel;
         this.address = address;
-        letters = new ArrayList<>();
         rentedRooms = new ArrayList<>();
-        allPeople.add(this);
-    }
-
-//    public Person(String name, String surname, String address) {
-//        this.name = name;
-//        this.surname = surname;
-//        Random r = new Random();
-//        this.pesel = 10000 + r.nextInt(90000);
-//        this.address = address;
-//        letters = new ArrayList<>();
-//        rentedRooms = new ArrayList<>();
-//        allPeople.add(this);
-//    }
-
-    public String getName() {
-        return name + " " + surname;
+        persons.add(this);
     }
 
     public String getPesel() {
         return pesel;
-    }
-
-    public ArrayList<TenantLetter> getLetters() {
-        return letters;
     }
 
     public ArrayList<Room> getRentedRooms() {
@@ -68,39 +50,22 @@ public class Person {
         return null;
     }
 
-    public static ArrayList<Person> getAllPeople() {
-        return allPeople;
+    public static ArrayList<Person> getPersons() {
+        return persons;
     }
 
     public void setRentedRooms(Room rentedRoom) {
         this.rentedRooms.add(rentedRoom);
     }
 
-    public void setLetters(TenantLetter letter) {
-        this.letters.add(letter);
-    }
-
     public static Person getByPesel(String pesel) {
-        for (Person person : allPeople) {
+        for (Person person : persons) {
             if (person.getPesel().equals(pesel)) {
                 return person;
             }
         }
-        System.out.println("There are no person with pesel " + pesel);
+        System.out.println("Person with pesel " + pesel + " not found.");
         return null;
-    }
-
-    public void addLetter(Room room, StringBuilder str) {
-        this.letters.add(new TenantLetter(room, str));
-    }
-
-    public void removeLetter(Room room) {
-        for (TenantLetter l : letters) {
-            if (l.getRoom().equals(room)) {
-                this.letters.remove(l);
-                break;
-            }
-        }
     }
 
     public void removeRoom(Room room) {
@@ -109,7 +74,7 @@ public class Person {
 
     @Override
     public String toString() {
-        return "\n" + name + " " + surname + " (" + pesel + ")";
+        return "\n" + firstName + " " + lastName + " (" + pesel + ")";
     }
 
 

@@ -1,4 +1,3 @@
-import java.io.IOException;
 import java.time.LocalDate;
 import java.time.Period;
 import java.util.ArrayList;
@@ -10,33 +9,43 @@ public class Room implements Comparable<Room> {
     private Person tenant;
     private LocalDate startDate;
     private LocalDate endDate;
-    private static ArrayList<Room> allRooms = new ArrayList<>();
+    private static ArrayList<Room> rooms = new ArrayList<>();
 
 
-    public Room(double volume, Person tenant, LocalDate startDate, LocalDate endDate) {
+    public Room(double volume,
+                Person tenant,
+                LocalDate startDate,
+                LocalDate endDate) {
         this.volume = volume;
         this.tenant = tenant;
         this.startDate = startDate;
         this.endDate = endDate;
-        allRooms.add(this);
+        rooms.add(this);
     }
 
-    public Room(double length, double width, double height, Person tenant, LocalDate startDate, LocalDate endDate) {
+    public Room(double length,
+                double width,
+                double height,
+                Person tenant,
+                LocalDate startDate,
+                LocalDate endDate) {
         this.volume = Volume.calculateVolume(length, width, height);
         this.tenant = tenant;
         this.startDate = startDate;
         this.endDate = endDate;
-        allRooms.add(this);
+        rooms.add(this);
     }
 
     public Room(double volume) {
         this.volume = volume;
-        allRooms.add(this);
+        rooms.add(this);
     }
 
-    public Room(double length, double width, double height) {
+    public Room(double length,
+                double width,
+                double height) {
         this.volume = Volume.calculateVolume(length, width, height);
-        allRooms.add(this);
+        rooms.add(this);
     }
 
     public double getVolume() {
@@ -55,13 +64,13 @@ public class Room implements Comparable<Room> {
         return endDate;
     }
 
-    public static ArrayList<Room> getAllRooms() {
-        return allRooms;
+    public static ArrayList<Room> getRooms() {
+        return rooms;
     }
 
     public static ArrayList<Apartment> getAllApartments() {
         ArrayList<Apartment> ap = new ArrayList<>();
-        for (Room r : allRooms) {
+        for (Room r : rooms) {
             if (r instanceof Apartment) {
                 ap.add((Apartment) r);
             }
@@ -71,7 +80,7 @@ public class Room implements Comparable<Room> {
 
     public static ArrayList<ParkingSpace> getAllParkings() {
         ArrayList<ParkingSpace> ps = new ArrayList<>();
-        for (Room r : allRooms) {
+        for (Room r : rooms) {
             if (r instanceof ParkingSpace) {
                 ps.add((ParkingSpace) r);
             }
@@ -90,29 +99,20 @@ public class Room implements Comparable<Room> {
     public void startRent(Person person,
                           LocalDate start,
                           LocalDate end) {
-        try {
-            if (!checkIfAvailable()) {
-                System.out.println("Room is being rented right now");
-                return;
-            }
+        if (!checkIfAvailable()) {
+            System.out.println("Room is being rented right now");
+            return;
+        }
 
-            if (person.getLetters().size() >= 3) {
-                throw new ProblematicTenantException(person);
-            }
+        if (person.getRentedRooms().size() >= 5) {
+            System.out.println("Person already has " + person.getRentedRooms().size() + " rooms rented");
+            return;
+        }
 
-            if (person.getRentedRooms().size() >= 5) {
-                System.out.println("Person already has " + person.getRentedRooms().size() + " rooms rented");
-                return;
-            }
-
-            if (this instanceof Apartment) {
-                startRentingApartment(person, start, end);
-            } else {
-                startRentingParkingSpace(person, start, end);
-            }
-
-        } catch (ProblematicTenantException e) {
-            e.printStackTrace();
+        if (this instanceof Apartment) {
+            startRentingApartment(person, start, end);
+        } else {
+            startRentingParkingSpace(person, start, end);
         }
     }
 
@@ -123,7 +123,7 @@ public class Room implements Comparable<Room> {
         this.startDate = start;
         this.endDate = end;
         person.setRentedRooms(this);
-        System.out.println("Rent started from " + start + " to " + end +  "by " + this);
+        System.out.println("Rent started from " + start + " to " + end +  " by " + this);
     }
 
     private void startRentingParkingSpace(Person person,
@@ -156,7 +156,6 @@ public class Room implements Comparable<Room> {
         if (period.getDays() <= 30 || period.getMonths() <= 1) {
             System.out.println("Rent was renewed, last end:" + this.endDate + ", current end:" + endDate);
             this.endDate = endDate;
-            this.tenant.removeLetter(this);
         } else {
             System.out.println("Rent can't be renewed, it's been " + period.getDays() + " days after expiring");
         }
@@ -165,7 +164,6 @@ public class Room implements Comparable<Room> {
     public void cancelRent() {
         Period period = Period.between(this.getEndDate(), Main.currentDate);
         if (period.getDays() <= 30 && period.getMonths() < 1) {
-            this.tenant.removeLetter(this);
             this.tenant.removeRoom(this);
             deleteTenant();
             System.out.println("Rent rent is canceled");

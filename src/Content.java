@@ -26,7 +26,9 @@ public abstract class Content implements Comparable<Content> {
 
     public static void setItems(Item item) { Content.items.add(item); }
 
-    public static void setVehicles(Vehicle vehicle) { Content.vehicles.add(vehicle); }
+    public static void setVehicles(Vehicle vehicle) {
+        Content.vehicles.add(vehicle);
+    }
 
     public static Item getItemByName(String name) {
         for (Item i : getItems()) {

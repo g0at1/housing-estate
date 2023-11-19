@@ -60,7 +60,7 @@ public class HousingEstate {
         return rented;
     }
 
-    public ArrayList<ParkingSpace> getRentedParkings() {
+    public ArrayList<ParkingSpace> getRentedParkingSpaces() {
         ArrayList<ParkingSpace> rented = new ArrayList<>();
         for (ParkingSpace p : parkingSpaces) {
             if (p.getTenant() != null) {
@@ -73,7 +73,7 @@ public class HousingEstate {
     public ArrayList<Room> getRentedRooms() {
         ArrayList<Room> rentedRooms = new ArrayList<>();
         rentedRooms.addAll(getRentedApartments());
-        rentedRooms.addAll(getRentedParkings());
+        rentedRooms.addAll(getRentedParkingSpaces());
         return rentedRooms;
     }
 
@@ -87,7 +87,7 @@ public class HousingEstate {
         return list;
     }
 
-    public ArrayList<ParkingSpace> getFreeParkings() {
+    public ArrayList<ParkingSpace> getFreeParkingSpaces() {
         ArrayList<ParkingSpace> list = new ArrayList<>();
         for (ParkingSpace p : parkingSpaces) {
             if (p.getTenant() == null) {
@@ -107,7 +107,7 @@ public class HousingEstate {
     }
 
     public ParkingSpace getFreeParkingById(int number) {
-        for (ParkingSpace parking : this.getFreeParkings()) {
+        for (ParkingSpace parking : this.getFreeParkingSpaces()) {
             if (parking.getIdNum() == number) {
                 return parking;
             }

@@ -8,14 +8,22 @@ public class ParkingSpace extends Room {
     private double freeVolume;
     private static int counter = 1;
 
-    public ParkingSpace(double volume, Person tenant, LocalDate startDate, LocalDate endDate) {
+    public ParkingSpace(double volume,
+                        Person tenant,
+                        LocalDate startDate,
+                        LocalDate endDate) {
         super(volume, tenant, startDate, endDate);
         content = new ArrayList<>();
         this.freeVolume = volume;
         this.idNum = counter++;
     }
 
-    public ParkingSpace(double length, double width, double height, Person tenant, LocalDate startDate, LocalDate endDate) {
+    public ParkingSpace(double length,
+                        double width,
+                        double height,
+                        Person tenant,
+                        LocalDate startDate,
+                        LocalDate endDate) {
         super(length, width, height, tenant, startDate, endDate);
         content = new ArrayList<>();
         this.freeVolume = getVolume();
@@ -29,7 +37,9 @@ public class ParkingSpace extends Room {
         this.idNum = counter++;
     }
 
-    public ParkingSpace(double length, double width, double height) {
+    public ParkingSpace(double length,
+                        double width,
+                        double height) {
         super(length, width, height);
         content = new ArrayList<>();
         this.freeVolume = getVolume();
