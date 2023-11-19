@@ -33,13 +33,17 @@ public class Main {
         Apartment ap2 = new Apartment(100, 1000, p2, LocalDate.parse("2023-11-11"), LocalDate.parse("2024-11-11"), ps2);
         Apartment ap3 = new Apartment(75, 800);
         Apartment ap4 = new Apartment(200, 2500);
-        Apartment ap5 = new Apartment(60, 750);
-        Apartment ap6 = new Apartment(60, 750);
+        Apartment ap5 = new Apartment(60, 550);
+        Apartment ap6 = new Apartment(68, 650);
+        Apartment ap7 = new Apartment(57, 750);
+        Apartment ap8 = new Apartment(45, 850);
+        Apartment ap9 = new Apartment(40, 950);
+        Apartment ap10 = new Apartment(30, 250);
 
-        p1.setRentedSpaces(ps1);
-        p2.setRentedSpaces(ps2);
         p1.setRentedSpaces(ap1);
         p2.setRentedSpaces(ap2);
+        p1.setRentedSpaces(ps1);
+        p2.setRentedSpaces(ps2);
 
         ps1.insertContent(p1, orc);
         ps1.insertContent(p1, cc);
@@ -50,7 +54,10 @@ public class Main {
         ap3.startRent(p3, LocalDate.parse("2023-11-11"), LocalDate.parse("2024-11-11"));
         ap4.startRent(p4, LocalDate.parse("2023-11-11"), LocalDate.parse("2024-11-11"));
 
-        ap1.checkIn(p1, Arrays.asList(p1, p2));
+        ap1.checkIn(p1, Arrays.asList(p1));
+        ap2.checkIn(p2, Arrays.asList(p2));
+        ap3.checkIn(p3, Arrays.asList(p3));
+        ap4.checkIn(p4, Arrays.asList(p4));
 
         do {
             Menu.printMenuOptions();

@@ -82,6 +82,7 @@ public class Menu {
         System.out.print("Choose apartment to rent");
         printList(housingEstate.getFreeApartments());
 
+        System.out.println("Enter apartment ID: ");
         int apartmentId = scanner.nextInt();
         ArrayList<LocalDate> dates = inputRentDates();
 
@@ -101,6 +102,7 @@ public class Menu {
             System.out.println("Choose parking space to rent");
             printList(housingEstate.getFreeParkingSpaces());
 
+            System.out.println("Enter parking space ID: ");
             int parkingSpaceId = scanner.nextInt();
             LocalDate startDate = LocalDate.parse("2023-11-11");
             LocalDate endDate = LocalDate.parse("2024-11-11");

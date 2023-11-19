@@ -9,7 +9,12 @@ public class Apartment extends Space {
     private ParkingSpace parkingSpace;
     private static int counter = 1;
 
-    public Apartment(double volume, double rentalFee, Person tenant, LocalDate startDate, LocalDate endDate, ParkingSpace parkingSpace) {
+    public Apartment(double volume,
+                     double rentalFee,
+                     Person tenant,
+                     LocalDate startDate,
+                     LocalDate endDate,
+                     ParkingSpace parkingSpace) {
         super(volume, tenant, startDate, endDate);
         this.rentalFee = rentalFee;
         this.parkingSpace = parkingSpace;
@@ -17,8 +22,25 @@ public class Apartment extends Space {
         this.idNum = counter++;
     }
 
-    public Apartment(double length, double width, double height, Person tenant, LocalDate startDate, LocalDate endDate, double rentalFee, ParkingSpace parkingSpace) {
+    public Apartment(double length,
+                     double width,
+                     double height,
+                     Person tenant,
+                     LocalDate startDate,
+                     LocalDate endDate,
+                     double rentalFee,
+                     ParkingSpace parkingSpace) {
         super(length, width, height, tenant, startDate, endDate);
+        this.rentalFee = rentalFee;
+        this.parkingSpace = parkingSpace;
+        this.people = new ArrayList<>();
+        this.idNum = counter++;
+    }
+
+    public Apartment(double volume,
+                     double rentalFee,
+                     ParkingSpace parkingSpace) {
+        super(volume);
         this.rentalFee = rentalFee;
         this.parkingSpace = parkingSpace;
         this.people = new ArrayList<>();
@@ -35,6 +57,14 @@ public class Apartment extends Space {
     public Apartment(double length, double width, double height, double rentalFee) {
         super(length, width, height);
         this.rentalFee = rentalFee;
+        this.people = new ArrayList<>();
+        this.idNum = counter++;
+    }
+
+    public Apartment(double length, double width, double height, double rentalFee, ParkingSpace parkingSpace) {
+        super(length, width, height);
+        this.rentalFee = rentalFee;
+        this.parkingSpace = parkingSpace;
         this.people = new ArrayList<>();
         this.idNum = counter++;
     }
